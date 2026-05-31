@@ -3,7 +3,7 @@ import { CalendarDays, CheckCircle2, Clock, XCircle, Plus, Upload } from "lucide
 import { useClub } from "@/providers/ClubProvider"
 import { useObligaciones, useUpdateEstadoObligacion, useEjercicios } from "@/hooks/useFiscal"
 import { PageWrapper } from "@/components/layout/PageWrapper"
-import { FileUploader } from "@/components/shared/FileUploader"
+import { StampedFileUploader } from "@/components/shared/StampedFileUploader"
 import { PageLoader } from "@/components/shared/LoadingSpinner"
 import { EmptyState } from "@/components/shared/EmptyState"
 import { Badge } from "@/components/ui/badge"
@@ -213,10 +213,11 @@ export function Obligaciones() {
             <DialogTitle>Subir justificante — {uploading?.nombre}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <FileUploader
+            <StampedFileUploader
               clubId={clubId}
               categoria="fiscal"
-              accept=".pdf,.jpg,.png"
+              numeroSerie={uploading ? `OBL-${uploading.id.slice(0, 6).toUpperCase()}` : "OBL-000000"}
+              clubNombre={currentClub?.nombre}
               onUploaded={(url) => {
                 if (uploading) {
                   marcarPresentada(uploading, url)

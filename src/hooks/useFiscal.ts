@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { supabase } from "@/lib/supabase"
+import { generarPackTareasFiscales } from "@/lib/pack-tareas"
 import type {
   ObligacionFiscal,
   ObligacionInsert,
@@ -188,8 +189,12 @@ export function useCreateEjercicio(clubId: string) {
       if (error) throw new Error(error.message)
       return data as EjercicioFiscal
     },
-    onSuccess: () => {
+    onSuccess: (ejercicio) => {
       qc.invalidateQueries({ queryKey: fiscalKeys.ejercicios(clubId) })
+      // Generar pack de tareas fiscales automáticamente (no bloqueante)
+      generarPackTareasFiscales({ clubId, ejercicioId: ejercicio.id, anio: ejercicio.anio })
+        .then(() => qc.invalidateQueries({ queryKey: ["tareas", clubId] }))
+        .catch(console.error)
     },
   })
 }

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { useParams, useNavigate, Link } from "react-router-dom"
-import { ArrowLeft, Edit, Trash2, QrCode } from "lucide-react"
+import { ArrowLeft, Edit, Trash2, QrCode, MessageCircle } from "lucide-react"
+import { abrirWhatsApp } from "@/utils/whatsapp"
 import { usePersona, useUpdatePersona, useDeletePersona } from "@/hooks/usePersonas"
 import { useClub } from "@/providers/ClubProvider"
 import { PageWrapper } from "@/components/layout/PageWrapper"
@@ -61,6 +62,16 @@ export function PersonaDetalle() {
           <Button variant="outline" size="sm" onClick={() => setShowQR(true)}>
             <QrCode className="h-4 w-4 mr-2" />Carnet
           </Button>
+          {p.telefono && (
+            <Button variant="outline" size="sm" onClick={() =>
+              abrirWhatsApp(
+                `Hola ${p.nombre}, te contactamos desde ${currentClub?.nombre ?? "el club"}. Tu número de carnet es: ${p.numero_licencia ?? p.id.slice(0,8).toUpperCase()}.`,
+                p.telefono ?? undefined,
+              )
+            }>
+              <MessageCircle className="h-4 w-4 mr-2" />WhatsApp
+            </Button>
+          )}
           <Button variant="outline" size="sm" onClick={() => setShowEdit(true)}>
             <Edit className="h-4 w-4 mr-2" />Editar
           </Button>

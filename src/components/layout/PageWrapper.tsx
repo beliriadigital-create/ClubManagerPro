@@ -1,5 +1,7 @@
+import type { ReactNode } from "react"
+
 interface PageWrapperProps {
-  title: string
+  title: ReactNode
   description?: string
   actions?: React.ReactNode
   children: React.ReactNode
